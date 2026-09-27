@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-
+const regexFilter = /[\+ A-Za-z0-9.-]+/m;
 
 
 const tables = {
@@ -90,13 +90,15 @@ for (const table in tables) {
 
             for(const filter in filters) {
 
-                query = `${query} ${filters[filter]} = '${req.query[filters[filter]].match(/[A-Za-z0-9.-]+/m)}'`
+                query = `${query} ${filters[filter]} = '${req.query[filters[filter]].match(regexFilter)}'`
 
                 if (filter <= filters.length - 2) {
                     query = `${query} AND`
                 }
             }
         }
+
+        query = `${query} ORDER BY time`
 
         const selectQuery = database.prepare(query);
         res.json({ message: selectQuery.all()});
@@ -120,7 +122,7 @@ for (const table in tables) {
             } else {
 
                 if (typeof req.query[item] == 'string') {
-                    values = `${values}, '${req.query[item].match(/[A-Za-z0-9.-]+/m)}'`
+                    values = `${values}, '${req.query[item].match(regexFilter)}'`
                 } else if (typeof req.query[item] == 'number') {
                     values = `${values}, ${req.query[item]}`
                 } else {
@@ -170,7 +172,7 @@ for (const table in tables) {
 
                 for(const filter in filters) {
 
-                    query = `${query} ${filters[filter]} = '${req.query[filters[filter]].match(/[A-Za-z0-9.-]+/m)}'`
+                    query = `${query} ${filters[filter]} = '${req.query[filters[filter]].match(regexFilter)}'`
 
                     if (filter <= filters.length - 2) {
                         query = `${query},\n`

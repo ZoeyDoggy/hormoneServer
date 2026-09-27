@@ -8,6 +8,9 @@
 - [x] return updated entry
 - [x] put requests for edits
 - [x] change post request from body to query
+- [x] fix unit entry
+- [x] fix notes column (+ symbol and space)
+- [x] sort by time
 
 ## Endpoints
 
